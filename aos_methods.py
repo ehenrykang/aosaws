@@ -202,9 +202,9 @@ def validate_homepage_texts_links():
                 print(f'Social Media Link TWITTER homepage is displayed and clickable.')
                 sleep(2)
             else:
-                print(f'Twitter link is not reachable')
+                print(f'Twitter link is not reachable. Please check your code.')
             driver.close()
-            print(f'Social Media Link TWITTER tab is closed. Please check your code.')
+            print(f'Social Media Link TWITTER tab is closed.')
             sleep(1.5)
             driver.switch_to.window(driver.window_handles[0])
             sleep(2)
@@ -312,9 +312,9 @@ def validate_contact_us_form():
     print(f'*------------------------------------~* VALIDATE CONTACT US FORM *~-------------------------------------*')
     if driver.current_url == locators.aos_url:
         sleep(1)
-        Select(driver.find_element(By.NAME, 'categoryListboxContactUs')).select_by_visible_text('Speakers')
+        Select(driver.find_element(By.NAME, 'categoryListboxContactUs')).select_by_visible_text('Laptops')
         sleep(1.5)
-        Select(driver.find_element(By.NAME, 'productListboxContactUs')).select_by_visible_text('Bose SoundLink Wireless Speaker')
+        Select(driver.find_element(By.NAME, 'productListboxContactUs')).select_by_visible_text('HP Pavilion 15z Laptop')
         sleep(1.5)
         driver.find_element(By.NAME, 'emailContactUs').send_keys(locators.email)
         sleep(1.5)
@@ -331,7 +331,7 @@ def validate_contact_us_form():
         driver.find_element(By.LINK_TEXT, 'CONTINUE SHOPPING').click()
         sleep(1.5)
         print(f'CONTACT US Form is submitted successfully.')
-        print(f'We are seeing the "Thank you for contacting Advantage support" message and the CONTINUE SHOPPING button.')
+        print(f'We see the "Thank you for contacting Advantage support" message and the CONTINUE SHOPPING button.')
         print(f'Test scenario --- CONTACT US Form validation --- is passed!')
         sleep(1.5)
         print()
@@ -380,7 +380,7 @@ def create_new_user():
             sleep(0.5)
             driver.find_element(By.NAME, 'addressRegisterPage').send_keys(locators.address)
             sleep(0.5)
-            driver.find_element(By.NAME, 'state_/_province_/_regionRegisterPage').send_keys(locators.state_province_region)
+            driver.find_element(By.NAME, 'state_/_province_/_regionRegisterPage').send_keys(locators.province)
             sleep(0.5)
             driver.find_element(By.NAME, 'postal_codeRegisterPage').send_keys(locators.postal_code)
             sleep(1)
@@ -392,7 +392,8 @@ def create_new_user():
             # Create new account
             driver.find_element(By.ID, 'register_btnundefined').click()
             sleep(1.5)
-            print(f'Test Scenario: Create a new user with Username: {locators.new_username} and Password: {locators.new_password} --- is passed!')
+            print(f'Test Scenario: Create a new user with Username: {locators.new_username} \n'
+                  f'and Password: {locators.new_password} --- is passed!')
             print()
         else:
             print('Some thing went wrong. Verify your code.')
@@ -461,7 +462,8 @@ def checkout_shopping_cart():
         assert driver.find_element(By.XPATH, '//span[contains(text(), "Thank you for buying with Advantage")]').is_displayed()
         sleep(1)
         locators.order_id = driver.find_element(By.ID, 'orderNumberLabel').text
-        print(f"Tracking number: {driver.find_element(By.ID, 'trackingNumberLabel').text} and Order number: {locators.order_id}")
+        print(f'Tracking number: {driver.find_element(By.ID, "trackingNumberLabel").text} \n'
+              f'and Order number: {locators.order_id}')
         if driver.current_url == locators.aos_orderpayment_url:
             sleep(1)
             print(f'Full details of user:')
@@ -492,12 +494,13 @@ def validate_order():
 
         # Access user 'My Order' account
         driver.find_element(By.ID, 'menuUserLink').click()
-        sleep(1)
+        sleep(2)
         driver.find_element(By.XPATH, '//*[@id="loginMiniTitle"]/label[2]').click()
         sleep(1)
 
         # Confirm order is displayed
         order_element = driver.find_element(By.XPATH, f'//label[contains(text(), "{locators.order_id}")]')
+        sleep(1)
         assert order_element.is_displayed()
         sleep(1)
         print(f'Test scenario --- validate order is displayed --- confirmed!')
@@ -505,7 +508,7 @@ def validate_order():
         sleep(1)
 
         # Delete order from user account
-        driver.find_element(By.XPATH, '//a[contains(text(), "REMOVE")]').click()
+        driver.find_element(By.XPATH, f"//*[contains(.,'{locators.order_id}')]/../td/span/a[text()='REMOVE']").click()
         sleep(1)
         # Confirm deletion of order
         driver.find_element(By.ID, 'confBtn_1').click()
@@ -598,9 +601,10 @@ def delete_user_account():
 
         # Account details page before deletion
         assert driver.find_element(By.XPATH, f'//label[contains(., "{locators.full_name}")]').is_displayed()
-        sleep(3)
+        sleep(4)
         print(f'Account details page for user: "{locators.full_name}" is displayed.')
         assert driver.find_element(By.XPATH, '//button[contains(., "Delete Account")]').is_displayed()
+        sleep(2)
         popup = driver.find_element(By.XPATH, '//button[contains(., "Delete Account")]').is_displayed()
         print(f'Delete popup is displayed: {popup}')
         sleep(2)
@@ -611,13 +615,14 @@ def delete_user_account():
 
         # Delete Confirmation screen
         assert driver.find_element(By.XPATH, '//*[contains(@class, "deletePopupBtn deleteRed")]').is_displayed()
+        sleep(2)
         popup1 = driver.find_element(By.XPATH, '//*[contains(@class, "deletePopupBtn deleteRed")]').is_displayed()
         print(f'Delete Confirmation screen is displayed: {popup1}')
         sleep(2)
 
         # Confirm deletion of account
         driver.find_element(By.XPATH, '//*[contains(@class, "deletePopupBtn deleteRed")]').click()
-        sleep(3)
+        sleep(4)
         print(f'Confirmation message is displayed: Account deleted successfully.')
         print(f'User {locators.full_name} with email address {locators.email} is deleted!')
         print()
@@ -633,8 +638,10 @@ def validate_user_account_deleted():
         print(f'Login Form is displayed --- continue to Login.')
         sleep(4)
         error_text = driver.find_element(By.ID, 'signInResultMessage').text
+        sleep(1)
         assert error_text == 'Incorrect user name or password.'
-        print(f'Username: {locators.new_username} and Password: {locators.new_password} is not found. Error: {error_text}')
+        print(f'Username: {locators.new_username} and Password: \n'
+              f'{locators.new_password} is not found. Error: {error_text}')
         print(f'Test scenario --- Username {locators.new_username} deleted successfully --- Test Passed!')
         sleep(2)
         print()
