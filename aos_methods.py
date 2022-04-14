@@ -609,6 +609,10 @@ def delete_user_account():
         print(f'Delete popup is displayed: {popup}')
         sleep(2)
 
+       # Scroll down to reveal delete button
+        driver.execute_script("window.scrollTo(1000, 1000)")
+        sleep(3)
+
         # Click the Delete Account button
         driver.find_element(By.CLASS_NAME, 'deleteBtnText').click()
         sleep(5)
